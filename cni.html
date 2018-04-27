@@ -127,9 +127,9 @@ function cle1(str1, factor){
 
     if(str1.charAt(i) == "<"){
       valeur = 0;
-    }else if (str1.match(/[a-z]/i)) {
+    }else if (str1.charAt(i).match(/[a-z]/i)) {
       valeur = str1.charCodeAt(i) - 55;
-    }else if(str1.match(/[0-9]/i)){
+    }else if(str1.charAt(i).match(/[0-9]/i)){
       valeur = Number(str1.charAt(i));
     }
     resultat += valeur * factor[i%3];
@@ -157,16 +157,16 @@ console.log(str3);
   for(var i = 0; i < str3.length; i++){
     if(str3.charAt(i) == "<"){
       valeur = 0;
-    }else if (str3.match(/[a-z]/i)) {
+    }else if (str3.charAt(i).match(/[a-z]/i)) {
       valeur = str3.charCodeAt(i) - 55;
 
-    }else if(str3.match(/[0-9]/i)){
+    }else if(str3.charAt(i).match(/[0-9]/i)){
       valeur = Number(str3.charAt(i));
 console.log(str3.charAt(i),i);
     }
     resultat += valeur * factor[i%3];
   }
-  return c1 = resultat%10;
+  return c3 = resultat%10;
   }
 
   function checkMRZ(mrz, mrzGenere){
