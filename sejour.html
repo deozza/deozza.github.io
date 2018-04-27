@@ -28,7 +28,13 @@
    <input type="number" id="Mnaissance" name="_Mnaissance" placeholder="Mois de naissance (MM)" value=1 min="1" max="12" required="required"/>
    <input type="number" id="Jnaissance" name="_Jnaissance" placeholder="Jour de naissance (JJ)" value=1 min="1" max="31" required="required"/>
 </div>
+
 <div>
+<h1>Date d'expiration (AAMMJJ)</h1>
+   <input type="number" id="Aexpiration" name="_Aexpiration" placeholder="Année d'expiration' (AA)" value=00 min="00" max="99" required="required"/>
+   <input type="number" id="Mexpiration" name="_Mexpiration" placeholder="Mois d'expiration (MM)" value=1 min="1" max="12" required="required"/>
+   <input type="number" id="Jexpiration" name="_Jexpiration" placeholder="Jour d'expiration (JJ)" value=1 min="1" max="31" required="required"/>
+</div>
 
 <div>
 <button type="submit">Verifier</button>
@@ -47,11 +53,22 @@ function getValues() {
 
   var nationalite = document.getElementById("nationalite").value.toString();
 
+  var Anaissance = document.getElementById("Anaissance").value.toString();
+  var Mnaissance = document.getElementById("Mnaissance").value.toString();
+  var Jnaissance = document.getElementById("Jnaissance").value.toString();
+  var naissance = Anaissance.concat(Mnaissance, Jnaissance);
+
+  var Aexpiration = document.getElementById("Aexpiration").value.toString();
+  var Mexpiration = document.getElementById("Mexpiration").value.toString();
+  var Jexpiration = document.getElementById("Jexpiration").value.toString();
+  var expiration = Aexpiration.concat(Mexpiration, Jexpiration);
+
   var factor = [7,3,1];
 
   var str1 = "IR".concat(nationalite,numeroH);
 console.log(str1);
   var c1 = cle1(str1  ,factor);
+  var c2 = cle2(naissance,factor);
 
 }
 
@@ -88,6 +105,18 @@ function cle1(str1, factor){
   }
   cle1 = resultat%10;
   console.log(cle1);
+}
+
+function cle2(str2,factor){
+  var cle2 = 0;
+  var resultat = 0;
+
+  for(var i = 0; i < str2.length; i++){
+    valeur = Number(str2.charAt(i));
+    resultat += valeur * factor[i%3];
+  }
+   c2 = resultat%10;
+   console.log(c2);
 }
 </script>
 
