@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html>
+ <body>
+<form id="checkMRZ" action="#" onSubmit="getValues();return false">
+
+<div>
+<h1>Numero de carte</h1>
+<input type="number" id="numero" name="_numero" site="12" maxlength="12" required="required">
+</div>
+
+
+<div>
+<h1>Identite</h1>
+   <input type="text" id="nom" name="_nom" placeholder="Nom" maxlength="25" required="required"/>
+   <input type="text" id="prenoms" name="_prenom" placeholder="Prénom" required="required"/>
+</div>
+
+<div>
+<h1>Nationalite</h1>
+  <input type="text" id="nationalite" name="_nationalite" placeholder="Nationalite" size="3" maxlength="3" required="required"/>
+</div>
+
+<div>
+<h1>Date de naissance (AAMMJJ)</h1>
+   <input type="number" id="Anaissance" name="_Anaissance" placeholder="Année de naissance (AA)" value=00 min="00" max="99" required="required"/>
+   <input type="number" id="Mnaissance" name="_Mnaissance" placeholder="Mois de naissance (MM)" value=1 min="1" max="12" required="required"/>
+   <input type="number" id="Jnaissance" name="_Jnaissance" placeholder="Jour de naissance (JJ)" value=1 min="1" max="31" required="required"/>
+</div>
+<div>
+
+<div>
+<h1>Sexe</h1>
+ <select id="sexe">
+  <option value="M">Homme</option>
+  <option value="F">Femme</option>
+ </select>
+</div>
+
+<div>
+<h1>MRZ</h1>
+  <textarea  id="mrz" name="_mrz" cols="75" required="required"></textarea>
+</div>
+
+<div>
+<button type="submit">Try it</button>
+</div>
+
+</form>
+<div>
+  <h1>Resultat</h1>
+<p id="resultat"></p>
+<h3>MRZ entre</h3>
+<textarea id="mrzEntre" cols="80"></textarea>
+<h3>MRZ genere</h3>
+<textarea id="mrzGenere" cols="80"></textarea>
+</div>
+
+<script>
+function getValues() {
+
+  var nom =         document.getElementById("nom").value.toString();
+  var prenom =      document.getElementById("prenoms").value.toString();
+  var nationalite = document.getElementById("nationalite").value.toString();
+  var Anaissance =  document.getElementById("Anaissance").value.toString();
+  var Mnaissance =  document.getElementById("Mnaissance").value.toString();
+  var Jnaissance =  document.getElementById("Jnaissance").value.toString();
+  var numero =      document.getElementById("numero").value.toString();
+  var sexe =        document.getElementById("sexe").value.toString();
+
+
+  var str1 = numero.substr(0,12);
+  var str2 = "".concat(Anaissance, Mnaissance, Jnaissance);
+
+  var mrz = document.getElementById("mrz").value.toString();
+
+  var factor = [7,3,1];
+
+  nom = completeNom(nom);
+  prenom = completePrenom(prenom);
+
+  c1 = cle1(str1, factor);
+  c2 = cle2(str2, factor);
+  c3 = cle3("ID", nationalite, nom, mrz.substr(30,6),numero, c1, prenom, "".concat(Anaissance, Mnaissance, Jnaissance),c2, sexe, factor);
+
+
+  var mrzGenere = "".concat("ID",  nationalite, nom, mrz.substr(30,6),numero, c1, prenom, "".concat(Anaissance, Mnaissance, Jnaissance),c2, sexe, c3);
+
+  checkMRZ = checkMRZ(mrz, mrzGenere);
+
+  document.getElementById("resultat").innerHTML = checkMRZ;
+  document.getElementById("mrzEntre").innerHTML = mrz;
+  document.getElementById("mrzGenere").innerHTML = mrzGenere;
+}
+
+  function completeNom(nom){
+    nomReplace = nom.split(" ").join('<');
+    nomReplace = nomReplace.split("'").join('<');
+
+    if(nomReplace.length < 25)
+    {
+      s = '<'.repeat(25-nomReplace.length);
+      nomReplace = "".concat(nomReplace,s);
+    }
+
+    return nomReplace;
+  }
+
+  function completePrenom(prenom){
+    prenomReplace = prenom.split("-").join("<");
+    prenomReplace = prenomReplace.split(" ").join("<<");
+
+    if(prenomReplace.length<14){
+        s = '<'.repeat(14-prenomReplace.length);
+        prenomReplace = "".concat(prenomReplace,s);
+    }else{
+      prenomReplace = prenomReplace.substr(0,14);
+    }
+    return prenomReplace;
+  }
+
+function cle1(str1, factor){
+  var cle1 = 0;
+  var resultat = 0;
+
+  for(var i = 0; i < str1.length; i++){
+
+    if(str1.charAt(i) == "<"){
+      valeur = 0;
+    }else if(str1.charAt(i).match(/[0-9]/i)){
+      valeur = Number(str1.charAt(i));
+    }else if (str1.charAt(i).match(/[a-z]/i)) {
+      valeur = str1.charCodeAt(i) - 55;
+    }
+    resultat += valeur * factor[i%3];
+  }
+  return c1 = resultat%10;
+}
+
+function cle2(str2,factor){
+  var cle2 = 0;
+  var resultat = 0;
+
+  for(var i = 0; i < str2.length; i++){
+    valeur = Number(str2.charAt(i));
+    resultat += valeur * factor[i%3];
+  }
+  return c2 = resultat%10;
+}
+
+function cle3(type, nationalite, nom, codeInterne, numero, c1, prenom, dateNaissa, c2, sexe, factor){
+  var c3 = 0;
+  var resultat = 0;
+
+  str3 = "".concat(type, nationalite, nom, codeInterne, numero, c1, prenom, dateNaissa, c2, sexe);
+
+  for(var i = 0; i < str3.length; i++){
+    if(str3.charAt(i) == "<"){
+      valeur = 0;
+    }
+    if(str3.charAt(i).match(/[0-9]+/)){
+      valeur = Number(str3.charAt(i));
+      console.log(valeur);
+    }
+    if (str3.charAt(i).match(/[a-zA-Z]+/)) {
+      valeur = str3.charCodeAt(i) - 55;
+    }
+    resultat += valeur * factor[i%3];
+  }
+  return c1 = resultat%10;
+  }
+
+  function checkMRZ(mrz, mrzGenere){
+    return mrz == mrzGenere;
+  }
+</script>
+
+</body>
+</html>
