@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<form id="checkMRZ" action="#" onSubmit="getValues();return false">
+<button type="submit">Verifier</button>
+</form>
+<script>
+function getValues() {
+    var factor = [7,3,1];
+    var c1 = cle1("020860101347", factor);
+    console.log(c1);
+}
+
+function cle1(str1, factor){
+ var cle1 = 0;
+ var resultat = 0;
+
+ for(var i = 0; i < str1.length; i++){
+
+   if(str1.charAt(i) == "<"){
+     valeur = 0;
+   }else if (str1.charAt(i).match(/[a-z]/i)) {
+     valeur = str1.charCodeAt(i) - 55;
+   }else if(str1.charAt(i).match(/[0-9]/i)){
+     valeur = Number(str1.charAt(i));
+   }
+   resultat += valeur * factor[i%3];
+ }
+ return c1 = resultat%10;
+}
+
+</script>

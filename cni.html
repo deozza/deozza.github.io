@@ -69,7 +69,7 @@ function getValues() {
   var sexe =        document.getElementById("sexe").value.toString();
 
 
-  var str1 = numero.substr(0,12);
+  var str1 = numero;
   var str2 = "".concat(Anaissance, Mnaissance, Jnaissance);
 
   var mrz = document.getElementById("mrz").value.toString();
@@ -81,10 +81,12 @@ function getValues() {
 
   c1 = cle1(str1, factor);
   c2 = cle2(str2, factor);
-  c3 = cle3("ID", nationalite, nom, mrz.substr(30,6),numero, c1, prenom, "".concat(Anaissance, Mnaissance, Jnaissance),c2, sexe, factor);
 
+  var str3 = "ID".concat(nationalite, nom, mrz.substr(30,6), numero, c1, prenom, Anaissance.concat(Mnaissance, Jnaissance), c2, sexe);
 
-  var mrzGenere = "".concat("ID",  nationalite, nom, mrz.substr(30,6),numero, c1, prenom, "".concat(Anaissance, Mnaissance, Jnaissance),c2, sexe, c3);
+  c3 = cle3(str3, factor);
+
+  var mrzGenere = "".concat("ID", nationalite, nom, mrz.substr(30,6),numero, c1, prenom, Anaissance.concat(Mnaissance, Jnaissance),c2, sexe, c3);
 
   checkMRZ = checkMRZ(mrz, mrzGenere);
 
@@ -148,21 +150,18 @@ function cle2(str2,factor){
   return c2 = resultat%10;
 }
 
-function cle3(type, nationalite, nom, codeInterne, numero, c1, prenom, dateNaissa, c2, sexe, factor){
+function cle3(str3, factor){
   var c3 = 0;
   var resultat = 0;
 
-  str3 = "".concat(type, nationalite, nom, codeInterne, numero, c1, prenom, dateNaissa, c2, sexe);
-console.log(str3);
   for(var i = 0; i < str3.length; i++){
+
     if(str3.charAt(i) == "<"){
       valeur = 0;
     }else if (str3.charAt(i).match(/[a-z]/i)) {
       valeur = str3.charCodeAt(i) - 55;
-
     }else if(str3.charAt(i).match(/[0-9]/i)){
       valeur = Number(str3.charAt(i));
-console.log(str3.charAt(i),i);
     }
     resultat += valeur * factor[i%3];
   }
