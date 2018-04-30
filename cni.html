@@ -112,7 +112,7 @@ function getValues() {
     prenomReplace = prenom.split("-").join("<");
     prenomReplace = prenomReplace.split(" ").join("<<");
 
-    if(prenomReplace.length<=14){
+    if(prenomReplace.length<14){
         s = '<'.repeat(14-prenomReplace.length);
         prenomReplace = "".concat(prenomReplace,s);
     }else{
