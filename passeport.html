@@ -17,6 +17,7 @@
   <div>
   <h1>MRZ</h1>
     <textarea  id="mrz" name="_mrz" cols="75" required="required"></textarea>
+    <p id="length"></p>
   </div>
 <div>
 <button type="submit">Verifier</button>
@@ -50,11 +51,19 @@ function getValues() {
     c5 = cle(str5, factor);
 
     mrzGenere = mrz.substr(0, 53).concat(c1, mrz.substr(54,9),c2,mrz.substr(64,7),c3,mrz.substr(72,14),c4,c5);
-    //console.log(mrzGenere);
     checkMRZ = checkMRZ(mrz, mrzGenere);
 
     document.getElementById("mrzGenere").innerHTML = mrzGenere;
     document.getElementById("resultat").innerHTML = checkMRZ;
+    if(mrz.length == 88){
+      var str = mrz.length.toString().concat('/88 caracteres');
+      var result = str.fontcolor("green");
+      document.getElementById("length").innerHTML = result;
+    }else{
+      var str = mrz.length.toString().concat('/88 caracteres');
+      var result = str.fontcolor("red");
+      document.getElementById("length").innerHTML = result;
+    }
 
 }
 

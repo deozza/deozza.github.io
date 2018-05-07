@@ -16,6 +16,7 @@
 <div>
 <h1>MRZ</h1>
   <textarea  id="mrz" name="_mrz" cols="75" required="required"></textarea>
+  <p id="length"></p>
 </div>
 
 <div>
@@ -52,6 +53,16 @@ function getValues() {
 
   document.getElementById("mrzGenere").innerHTML = mrzGenere;
     document.getElementById("resultat").innerHTML = checkMRZ;
+
+if(mrz.length == 72){
+  var str = mrz.length.toString().concat('/72 caracteres');
+  var result = str.fontcolor("green");
+  document.getElementById("length").innerHTML = result;
+}else{
+  var str = mrz.length.toString().concat('/72 caracteres');
+  var result = str.fontcolor("red");
+  document.getElementById("length").innerHTML = result;
+}
 }
 
 function cle1(str1, factor){
